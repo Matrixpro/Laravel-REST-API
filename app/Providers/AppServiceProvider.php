@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\FetchProductsForUserInterface;
+use App\Models\Product;
+use App\Models\Queries\FetchProductsForUser;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(FetchProductsForUserInterface::class, FetchProductsForUser::class);
     }
 
     /**
