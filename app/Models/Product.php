@@ -14,10 +14,10 @@ class Product extends Model
      * Token permissions
      */
     public static $permissions = [
-        'product:create',
-        'product:read',
-        'product:update',
-        'product:delete',
+        "product:create",
+        "product:read",
+        "product:update",
+        "product:delete",
     ];
 
     public function user()

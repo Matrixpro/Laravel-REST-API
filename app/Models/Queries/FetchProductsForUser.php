@@ -2,10 +2,10 @@
 
 namespace App\Models\Queries;
 
-use App\Contracts\FetchProductsForUserContract;
+use App\Contracts\FetchProductsForUserInterface;
 use Illuminate\Database\Eloquent\Builder;
 
-class FetchProductsForUser implements FetchProductsForUserContract {
+class FetchProductsForUser implements FetchProductsForUserInterface {
 
     public function handle(Builder $builder, int $user_id): Builder
     {
