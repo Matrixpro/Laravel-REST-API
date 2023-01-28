@@ -30,12 +30,17 @@ class ProductController extends Controller
 
         $products = $query->handle(
             builder: $this->builder,
-            user_id: $request->user()->id
+            user_id: $request->user()->id,
         )->cursorPaginate(
             perPage: 10,
             cursor: request("cursor")
         );
 
         return ProductResource::collection($products);
+    }
+
+    public function show(Product $product)
+    {
+        return ProductResource::collection([$product]);
     }
 }

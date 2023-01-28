@@ -67,18 +67,18 @@ class ApiProductEndpointTest extends TestCase
      */
     public function test_user_can_get_products()
     {
-        $payload = [];
-
-
         $this->actingAs($this->user);
 
-        $response = $this->getJson('/api/product', $payload);
+        $response = $this->getJson('/api/product');
 
         $response->assertStatus(200)
             ->assertJsonCount(10, 'data')
             ->assertJsonStructure([
                 'data',
                 'links' => [
+                    'first',
+                    'last',
+                    'prev',
                     'next',
                 ],
                 'meta' => [
@@ -88,6 +88,69 @@ class ApiProductEndpointTest extends TestCase
                     'prev_cursor',
                 ],
             ]);
+    }
+
+    /**
+     * Tests that a user can get a product via product api endpoint
+     * @return void
+     */
+    public function test_user_can_get_a_product()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/product/1');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonStructure([
+                'data',
+            ]);
+    }
+
+    /**
+     * Tests that a user can get products via product api endpoint
+     * @return void
+     */
+    public function test_user_can_filter_products()
+    {
+        $this->actingAs($this->user);
+
+        Product::factory(1)->for($this->user)->create(['name' => 'Widget']);
+
+        $response = $this->getJson('/api/product?filter[name]=Widget');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonStructure([
+                'data',
+                'links' => [
+                    'first',
+                    'last',
+                    'prev',
+                    'next',
+                ],
+                'meta' => [
+                    'path',
+                    'per_page',
+                    'next_cursor',
+                    'prev_cursor',
+                ],
+            ]);
+    }
+
+    /**
+     * Tests that a user can get products via product api endpoint
+     * @return void
+     */
+    public function test_user_can_not_use_bad_filter()
+    {
+        $this->actingAs($this->user);
+
+        Product::factory(1)->for($this->user)->create(['name' => 'Widget']);
+
+        $response = $this->getJson('/api/product?filter[bad]=Widget');
+
+        $response->assertStatus(500);
     }
 
     /**
